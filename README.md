@@ -1,25 +1,12 @@
-# notes-api — Docker, explained through a real backend
+# notes-api — Docker, Explained Through a Real Backend Application
 
-This is the companion repository for the Medium article
-**[Docker Explained Through a Real Backend Application](https://medium.com/@shahadathhs/)**.
-The full article text is also in this repo: [`ARTICLE.md`](ARTICLE.md).
+Companion repository for the Medium article:
 
-A small Node.js + TypeScript notes API with a PostgreSQL database, built and shipped with Docker —
-step by step, from a naive 1.71 GB image down to a 356 MB production build.
+📚 **[Docker Explained Through a Real Backend Application](https://medium.com/@shahadathhs/docker-explained-through-a-real-backend-application-4ee7a422dd38)**
 
-> The article walks through every file in this repo in the order you'd actually write them.
-> This README is the short version. The article is the full story.
+A small Node.js + TypeScript notes API with a PostgreSQL database, built and shipped with Docker — step by step, from a naive **1.71 GB** image down to a **356 MB** production build. The full article text is also in this repo: [`ARTICLE.md`](ARTICLE.md).
 
-## What's inside
-
-| File | Purpose |
-|---|---|
-| `src/index.ts` | The notes API — Express + `pg`, ~60 lines |
-| `Dockerfile` | The naive first version (builds to 1.71 GB) |
-| `Dockerfile.optimized` | Multi-stage production build (356 MB) |
-| `compose.yaml` | The full stack: API + Postgres, network, volume, healthchecks |
-| `.dockerignore` | Keeps `node_modules`, `.env`, and `.git` out of the build context |
-| `ARTICLE.md` | The full article text |
+> Every command output in the article was captured live from this app — including the failures. The `localhost` trap, the disappearing database, the 79% image size cut: all real.
 
 ## Quick start
 
@@ -30,16 +17,15 @@ docker compose up -d --build
 The API waits for Postgres to pass its healthcheck, then starts:
 
 ```text
-[+] Running 4/4
- ✔ Container notes-db-1   Healthy
- ✔ Container notes-api-1  Started
+ Container notes-db-1 Started
+ Container notes-db-1 Healthy
+ Container notes-api-1 Started
 ```
 
 Try it:
 
 ```bash
 curl http://localhost:8080/health
-# {"status":"ok","uptime":4.813545335}
 
 curl -X POST http://localhost:8080/notes \
   -H 'Content-Type: application/json' \
@@ -48,27 +34,34 @@ curl -X POST http://localhost:8080/notes \
 curl http://localhost:8080/notes
 ```
 
-Tear it all down (add `-v` to delete the data volume too):
+Tear it down (add `-v` to delete the data volume too):
 
 ```bash
 docker compose down
 ```
 
-## Commands from the article
+## Repository contents
 
-Everything demonstrated in the article can be re-run from this repo. A few highlights:
+- **[`src/index.ts`](src/index.ts)** — the notes API: Express + `pg`, ~60 lines
+- **[`Dockerfile`](Dockerfile)** — the naive first version from the article (builds to 1.71 GB)
+- **[`Dockerfile.optimized`](Dockerfile.optimized)** — the multi-stage production build (356 MB)
+- **[`compose.yaml`](compose.yaml)** — the full stack: API + Postgres, healthchecks, named volume, restart policy
+- **[`.dockerignore`](.dockerignore)** — keeps `node_modules`, `.env`, and `.git` out of the build context
+- **[`ARTICLE.md`](ARTICLE.md)** — the full article text
+
+## Reproduce the article's experiments
 
 ```bash
-# build both image versions and compare sizes (§8.5)
-docker build -t notes-api:1.0 .                           # naive — 1.71 GB
-docker build -f Dockerfile.optimized -t notes-api:prod .  # multi-stage — 356 MB
+# build both image versions and compare sizes (article §8.5)
+docker build -t notes-api:1.0 .
+docker build -f Dockerfile.optimized -t notes-api:prod .
 docker images notes-api
 
 # inspect the layers that make up the naive image (§3.4)
 docker history notes-api:1.0
 
 # run the api alone and watch it fail — the localhost problem (§7.2)
-docker run --rm --name notes-api notes-api:1.0
+docker run --rm notes-api:1.0
 # failed to start: connect ECONNREFUSED 127.0.0.1:5432
 ```
 
@@ -88,12 +81,16 @@ Dockerfile ──build──▶ Image ──run──▶ Container
          environment variables configure
 ```
 
+## Related
+
+- 📝 **[Docker Explained Through a Real Backend Application](https://medium.com/@shahadathhs/docker-explained-through-a-real-backend-application-4ee7a422dd38)** — the article this repo accompanies
+- 📋 **[docker-cheatsheet](https://github.com/shahadathhs/docker-cheatsheet)** — my Docker command reference: every command with flags, options, and examples, plus fully dockerized practice projects
+- 🌐 **[Useful Networking Commands for Deployment & Troubleshooting](https://medium.com/@shahadathhs/useful-networking-commands-for-deployment-troubleshooting-30b904c59657)** — the companion article for diagnosing DNS, ports, firewalls, and TLS from the command line
+
 ## Requirements
 
-- Docker (any recent version)
-
-That's it. No Node, no Postgres — the containers bring everything.
+Docker — any recent version. No Node, no Postgres; the containers bring everything.
 
 ## License
 
-MIT
+[MIT](LICENSE)
