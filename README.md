@@ -2,6 +2,7 @@
 
 This is the companion repository for the Medium article
 **[Docker Explained Through a Real Backend Application](https://medium.com/@shahadathhs/)**.
+The full article text is also in this repo: [`ARTICLE.md`](ARTICLE.md).
 
 A small Node.js + TypeScript notes API with a PostgreSQL database, built and shipped with Docker —
 step by step, from a naive 1.71 GB image down to a 356 MB production build.
@@ -18,6 +19,7 @@ step by step, from a naive 1.71 GB image down to a 356 MB production build.
 | `Dockerfile.optimized` | Multi-stage production build (356 MB) |
 | `compose.yaml` | The full stack: API + Postgres, network, volume, healthchecks |
 | `.dockerignore` | Keeps `node_modules`, `.env`, and `.git` out of the build context |
+| `ARTICLE.md` | The full article text |
 
 ## Quick start
 
