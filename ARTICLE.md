@@ -150,14 +150,12 @@ One image, many containers — like one program and many processes. Each contain
 
 ### 2.4 Images vs Containers
 
-The relationship is **class vs instance**, or if you prefer, **recipe vs dish**:
+The relationship is **class vs instance**, or if you prefer, **recipe vs dish**. Image on the left, container on the right:
 
-| Image | Container |
-|---|---|
-| Read-only template | Running (or stopped) process |
-| Built once, stored on disk | Created from an image |
-| Immutable | Has state, logs, a writable layer |
-| `docker build`, `docker pull` | `docker run`, `docker ps` |
+- Read-only template → running (or stopped) process
+- Built once, stored on disk → created from an image
+- Immutable → has state, logs, a writable layer
+- `docker build`, `docker pull` → `docker run`, `docker ps`
 
 Delete a container and the image remains. Delete the image while containers run from it, and Docker refuses.
 
@@ -215,16 +213,14 @@ Six instructions, and the app is packaged.
 
 The instructions you'll use 95% of the time:
 
-| Instruction | What it does |
-|---|---|
-| `FROM` | Base image to start from |
-| `WORKDIR` | Sets the working directory inside the image |
-| `COPY` | Copies files from your machine into the image |
-| `RUN` | Executes a command **at build time** |
-| `ENV` | Sets environment variables inside the image |
-| `EXPOSE` | Documents which port the app listens on |
-| `CMD` | The command to run **when a container starts** |
-| `ENTRYPOINT` | The fixed executable; `CMD` becomes its arguments |
+- **`FROM`** — the base image to start from
+- **`WORKDIR`** — sets the working directory inside the image
+- **`COPY`** — copies files from your machine into the image
+- **`RUN`** — executes a command **at build time**
+- **`ENV`** — sets environment variables inside the image
+- **`EXPOSE`** — documents which port the app listens on
+- **`CMD`** — the command to run **when a container starts**
+- **`ENTRYPOINT`** — the fixed executable; `CMD` becomes its arguments
 
 The distinction that trips people up: **`RUN` happens at build time, `CMD` happens every time a container starts.** `RUN npm install` bakes dependencies into the image. `CMD ["npm", "start"]` runs on every container start.
 
@@ -551,12 +547,12 @@ Unlike a volume, **you** own the location. The container reads and writes your a
 
 ### 5.6 Volumes vs Bind Mounts
 
-| | Named volume | Bind mount |
-|---|---|---|
-| Location | Docker-managed (`/var/lib/docker/volumes/...`) | Any host path you choose |
-| Portable | Yes — works anywhere Docker runs | No — depends on host paths |
-| Performance | Good | Slower on macOS/Windows |
-| Best for | Databases, app data | Live source code in development |
+Two dimensions, side by side — named volume on the left, bind mount on the right:
+
+- **Location:** Docker-managed (`/var/lib/docker/volumes/...`) → any host path you choose
+- **Portable:** yes — works anywhere Docker runs → no — depends on host paths
+- **Performance:** good → slower on macOS/Windows
+- **Best for:** databases, app data → live source code in development
 
 The rule of thumb: **volumes for data you want to keep, bind mounts for code you're actively editing.** In production you'll almost exclusively use volumes.
 
@@ -841,11 +837,11 @@ Now editing source invalidates only the last two layers — dependencies come fr
 
 The default `node:22` is built on a full Debian install — compilers, docs, package managers — none of which a runtime needs. Compare the family:
 
-| Tag | Contents | Typical use |
-|---|---|---|
-| `node:22` | Full Debian | maximum compatibility |
-| `node:22-slim` | Debian minus the fat | production default |
-| `node:22-alpine` | Alpine Linux, musl | smallest, occasional glibc quirks |
+The family, from fat to thin:
+
+- **`node:22`** — full Debian. Maximum compatibility, ~1 GB of stuff your runtime never asked for
+- **`node:22-slim`** — Debian minus the fat. The production default
+- **`node:22-alpine`** — Alpine Linux with musl. Smallest, occasional glibc quirks with native modules
 
 For most production APIs, `node:22-slim` is the sweet spot — dramatically smaller than full, with none of Alpine's native-module edge cases.
 
@@ -934,13 +930,13 @@ Smaller images aren't vanity: they pull faster on every deploy, scan faster, and
 
 ### 9.1 Development vs Production
 
-| | Development | Production |
-|---|---|---|
-| Source | Bind-mounted live code | Baked into the image |
-| Dependencies | Everything, plus watchers | Production-only |
-| Image | Big, fast to iterate | Small, locked down |
-| Config | `.env` files | Secrets manager / inject at run |
-| Restart | You restart manually | Automatic |
+Same stack, two very different jobs — development on the left, production on the right:
+
+- **Source:** bind-mounted live code → baked into the image
+- **Dependencies:** everything, plus watchers → production-only
+- **Image:** big, fast to iterate → small, locked down
+- **Config:** `.env` files → secrets manager / inject at run
+- **Restart:** you restart manually → automatic
 
 The image you ship should contain **only what running the app requires**. Everything else is surface area and weight.
 
