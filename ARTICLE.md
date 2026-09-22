@@ -1352,8 +1352,6 @@ You don't need all of it. You need the mental model — and you have it now.
 - **Compose file reference** — [docs.docker.com/reference/compose-file](https://docs.docker.com/reference/compose-file)
 - **Node.js Docker Best Practices** — [github.com/nodejs/docker-node](https://github.com/nodejs/docker-node/blob/main/docs/BestPractices.md)
 
-**The companion repository** — [github.com/shahadathhs/docker-notes-api](https://github.com/shahadathhs/docker-notes-api) — every file this article builds, ready to run: `docker compose up -d --build` gives you the working stack, and you can rebuild both image versions to reproduce the 1.71 GB → 356 MB comparison yourself.
-
-**Docker command reference** — [github.com/shahadathhs/docker-cheatsheet](https://github.com/shahadathhs/docker-cheatsheet) — every Docker command with flags, options, and examples, plus fully dockerized practice projects.
+**The companion repository** — [github.com/shahadathhs/docker-notes-api](https://github.com/shahadathhs/docker-notes-api) — every file this article builds, ready to run: `docker compose up -d --build` gives you the working stack, and you can rebuild both image versions to reproduce the 1.71 GB → 356 MB comparison yourself. Its README also carries a complete Docker command cheat sheet.
 
 **Related:** [*Useful Networking Commands for Deployment & Troubleshooting*](https://medium.com/@shahadathhs/useful-networking-commands-for-deployment-troubleshooting-30b904c59657) — the companion guide to diagnosing DNS, ports, firewalls, and TLS from the command line. The section 10 troubleshooting mindset, applied to the network itself.
